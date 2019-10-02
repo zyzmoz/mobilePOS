@@ -1,9 +1,20 @@
-import React, { Component } from 'react'
-import { StyleSheet, Text, View } from 'react-native'
-import { Button } from 'react-native-elements'
-import { withFirebaseHOC } from '../config/Firebase'
+import React, { Component } from 'react';
+import { StyleSheet, Text, ScrollView } from 'react-native';
+import { withFirebaseHOC } from '../config/Firebase';
+import ProductGroupList from '../components/ProductGroupList';
 
-class Home extends Component {
+class Home extends Component {  
+
+  static navigationOptions = {
+    title: 'Order'
+  }
+  
+  state = {
+    user: {},
+    groups: [],
+    products: []
+  }
+
   handleSignout = async () => {
     try {
       await this.props.firebase.signOut()
@@ -12,19 +23,27 @@ class Home extends Component {
       console.log(error)
     }
   }
+
+  componentDidMount = async () => {
+    const user = await this.props.firebase.getCurrentUser();    
+    const groups = await this.props.firebase.getProductGroups();
+    const products = await this.props.firebase.getProducts();
+    this.setState({ groups, user, products });
+  }
+
+  openProducts = async(group) => {
+    const { id } = group;    
+    const products = await this.state.products.filter(product => product.groupId === id);    
+    this.props.navigation.navigate('Products', {group, products})
+  }
+
   render() {
+    const { groups, user } = this.state;
     return (
-      <View style={styles.container}>
-        <Text>Home</Text>
-        <Button
-          title='Signout'
-          onPress={this.handleSignout}
-          titleStyle={{
-            color: '#F57C00'
-          }}
-          type='clear'
-        />
-      </View>
+      <ScrollView style={styles.container}>
+        <Text>Operator: {user.name}</Text>
+        <ProductGroupList groups={groups} openProducts={this.openProducts} />
+      </ScrollView>
     )
   }
 }
@@ -33,9 +52,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center'
+    marginHorizontal: 3,
+    marginVertical: 3,    
   }
-})
+});
 
 export default withFirebaseHOC(Home)

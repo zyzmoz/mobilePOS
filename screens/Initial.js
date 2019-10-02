@@ -6,6 +6,8 @@ import * as Icon from '@expo/vector-icons'
 import { withFirebaseHOC } from '../config/Firebase'
 
 class Initial extends Component {
+  
+
   state = {
     isAssetsLoadingComplete: false
   }

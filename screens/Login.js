@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react'
-import { StyleSheet, SafeAreaView, View, TouchableOpacity } from 'react-native'
+import { StyleSheet, ScrollView, View, TouchableOpacity, KeyboardAvoidingView, AsyncStorage } from 'react-native'
 import { Button } from 'react-native-elements'
 import { Ionicons } from '@expo/vector-icons'
 import { Formik } from 'formik'
@@ -19,7 +19,14 @@ const validationSchema = Yup.object().shape({
   password: Yup.string()
     .label('Password')
     .required()
-    .min(6, 'Password must have at least 6 characters ')
+    .min(6, 'Password must have at least 6 characters '),
+  cnpj: Yup.string()
+    .label('CNPJ')
+    .matches(/^\d+$/, "Please inform the CNPJ typing onlu numbers")
+    .required('Please enter a registered CNPJ')
+    .min(14, "CNPJ must have at least 14 characters")
+    
+    
 })
 
 class Login extends Component {
@@ -38,7 +45,8 @@ class Login extends Component {
   }
 
   handleOnLogin = async (values, actions) => {
-    const { email, password } = values
+    const { email, password, cnpj } = values;
+    await AsyncStorage.setItem('@comandas:cnpj', cnpj);
     try {
       const response = await this.props.firebase.loginWithEmail(email, password)
 
@@ -55,77 +63,94 @@ class Login extends Component {
   render() {
     const { passwordVisibility, rightIcon } = this.state
     return (
-      <SafeAreaView style={styles.container}>
-        <HideWithKeyboard style={styles.logoContainer}>
-          <AppLogo />
-        </HideWithKeyboard>
-        <Formik
-          initialValues={{ email: '', password: '' }}
-          onSubmit={(values, actions) => {
-            this.handleOnLogin(values, actions)
-          }}
-          validationSchema={validationSchema}>
-          {({
-            handleChange,
-            values,
-            handleSubmit,
-            errors,
-            isValid,
-            touched,
-            handleBlur,
-            isSubmitting
-          }) => (
-            <Fragment>
-              <FormInput
-                name='email'
-                value={values.email}
-                onChangeText={handleChange('email')}
-                placeholder='Enter email'
-                autoCapitalize='none'
-                iconName='ios-mail'
-                iconColor='#2C384A'
-                onBlur={handleBlur('email')}
-              />
-              <ErrorMessage errorValue={touched.email && errors.email} />
-              <FormInput
-                name='password'
-                value={values.password}
-                onChangeText={handleChange('password')}
-                placeholder='Enter password'
-                secureTextEntry={passwordVisibility}
-                iconName='ios-lock'
-                iconColor='#2C384A'
-                onBlur={handleBlur('password')}
-                rightIcon={
-                  <TouchableOpacity onPress={this.handlePasswordVisibility}>
-                    <Ionicons name={rightIcon} size={28} color='grey' />
-                  </TouchableOpacity>
-                }
-              />
-              <ErrorMessage errorValue={touched.password && errors.password} />
-              <View style={styles.buttonContainer}>
-                <FormButton
-                  buttonType='outline'
-                  onPress={handleSubmit}
-                  title='LOGIN'
-                  buttonColor='#039BE5'
-                  disabled={!isValid || isSubmitting}
-                  loading={isSubmitting}
-                />
-              </View>
-              <ErrorMessage errorValue={errors.general} />
-            </Fragment>
-          )}
-        </Formik>
-        <Button
-          title="Don't have an account? Sign Up"
-          onPress={this.goToSignup}
-          titleStyle={{
-            color: '#F57C00'
-          }}
-          type='clear'
-        />
-      </SafeAreaView>
+      <KeyboardAvoidingView
+        enabled
+        behavior="padding"
+        style={styles.container}
+      >
+        <ScrollView >
+          <HideWithKeyboard style={styles.logoContainer}>
+            <AppLogo />
+          </HideWithKeyboard>
+          <Formik
+            initialValues={{ email: '', password: '', cnpj: '' }}
+            onSubmit={(values, actions) => {
+              this.handleOnLogin(values, actions)
+            }}
+            validationSchema={validationSchema}>
+            {({
+              handleChange,
+              values,
+              handleSubmit,
+              errors,
+              isValid,
+              touched,
+              handleBlur,
+              isSubmitting
+            }) => (
+                <Fragment>
+                  <FormInput
+                    name='cnpj'
+                    value={values.cnpj}
+                    onChangeText={handleChange('cnpj')}
+                    placeholder='Enter cnpj'
+                    autoCapitalize='none'
+                    iconName='ios-key'
+                    iconColor='#2C384A'
+                    onBlur={handleBlur('cnpj')}
+                  />
+                  <ErrorMessage errorValue={touched.cnpj && errors.cnpj} />
+                  <FormInput
+                    name='email'
+                    value={values.email}
+                    onChangeText={handleChange('email')}
+                    placeholder='Enter email'
+                    autoCapitalize='none'
+                    iconName='ios-mail'
+                    iconColor='#2C384A'
+                    onBlur={handleBlur('email')}
+                  />
+                  <ErrorMessage errorValue={touched.email && errors.email} />
+                  <FormInput
+                    name='password'
+                    value={values.password}
+                    onChangeText={handleChange('password')}
+                    placeholder='Enter password'
+                    secureTextEntry={passwordVisibility}
+                    iconName='ios-lock'
+                    iconColor='#2C384A'
+                    onBlur={handleBlur('password')}
+                    rightIcon={
+                      <TouchableOpacity onPress={this.handlePasswordVisibility}>
+                        <Ionicons name={rightIcon} size={28} color='grey' />
+                      </TouchableOpacity>
+                    }
+                  />
+                  <ErrorMessage errorValue={touched.password && errors.password} />
+                  <View style={styles.buttonContainer}>
+                    <FormButton
+                      buttonType='outline'
+                      onPress={handleSubmit}
+                      title='LOGIN'
+                      buttonColor='#039BE5'
+                      disabled={!isValid || isSubmitting}
+                      loading={isSubmitting}
+                    />
+                  </View>
+                  <ErrorMessage errorValue={errors.general} />
+                </Fragment>
+              )}
+          </Formik>
+          <Button
+            title="Don't have an account? Sign Up"
+            onPress={this.goToSignup}
+            titleStyle={{
+              color: '#F57C00'
+            }}
+            type='clear'
+          />
+        </ScrollView>
+      </KeyboardAvoidingView>
     )
   }
 }
@@ -134,14 +159,14 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
-    marginTop: 50
+    marginTop: 30
   },
   logoContainer: {
     marginBottom: 15,
     alignItems: 'center'
   },
   buttonContainer: {
-    margin: 25
+    marginHorizontal: 25
   }
 })
 

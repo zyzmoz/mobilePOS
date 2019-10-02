@@ -25,7 +25,12 @@ const validationSchema = Yup.object().shape({
   confirmPassword: Yup.string()
     .oneOf([Yup.ref('password')], 'Confirm Password must matched Password')
     .required('Confirm Password is required'),
-  check: Yup.boolean().oneOf([true], 'Please check the agreement')
+  check: Yup.boolean().oneOf([true], 'Please check the agreement'),
+  cnpj: Yup.string()
+    .label('CNPJ')
+    .matches(/^\d+$/, "Please inform the CNPJ typing onlu numbers")
+    .required('Please enter a registered CNPJ')
+    .min(14, "CNPJ must have at least 14 characters")
 })
 
 class Signup extends Component {
@@ -55,7 +60,7 @@ class Signup extends Component {
   }
 
   handleOnSignup = async (values, actions) => {
-    const { name, email, password } = values
+    const { name, email, password, cnpj } = values
 
     try {
       const response = await this.props.firebase.signupWithEmail(
@@ -65,7 +70,7 @@ class Signup extends Component {
 
       if (response.user.uid) {
         const { uid } = response.user
-        const userData = { email, name, uid }
+        const userData = { email, name, uid, cnpj }
         await this.props.firebase.createNewUser(userData)
         this.props.navigation.navigate('App')
       }
@@ -97,6 +102,7 @@ class Signup extends Component {
               name: '',
               email: '',
               password: '',
+              cnpj: '',
               confirmPassword: '',
               check: false
             }}
@@ -116,6 +122,16 @@ class Signup extends Component {
               setFieldValue
             }) => (
                 <Fragment>
+                  <FormInput
+                    name='cnpj'
+                    value={values.cnpj}
+                    onChangeText={handleChange('cnpj')}
+                    placeholder="Enter your company's CNPJ"
+                    iconName='md-key'
+                    iconColor='#2C384A'
+                    onBlur={handleBlur('cnpj')}
+                  />
+                  <ErrorMessage errorValue={touched.cnpj && errors.cnpj} />
                   <FormInput
                     name='name'
                     value={values.name}
