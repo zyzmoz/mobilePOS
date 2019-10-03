@@ -6,7 +6,7 @@ const ProductGroupList = ({ groups, openProducts }) => {
   
   return (
     <View style={styles.tiles}>
-      {groups.length > 0 && groups.map((group, i) =>
+      {groups && groups.map((group, i) =>
         <Tile
           key={i}
           overlayContainerStyle={styles.tile}

@@ -127,7 +127,7 @@ class Signup extends Component {
                     value={values.cnpj}
                     onChangeText={handleChange('cnpj')}
                     placeholder="Enter your company's CNPJ"
-                    iconName='md-key'
+                    iconName='ios-key'
                     iconColor='#2C384A'
                     onBlur={handleBlur('cnpj')}
                   />
@@ -137,7 +137,7 @@ class Signup extends Component {
                     value={values.name}
                     onChangeText={handleChange('name')}
                     placeholder='Enter your full name'
-                    iconName='md-person'
+                    iconName='ios-person'
                     iconColor='#2C384A'
                     onBlur={handleBlur('name')}
                   />
