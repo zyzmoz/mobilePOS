@@ -8,7 +8,7 @@ export const getProducts = () => {
     const cnpj = await AsyncStorage.getItem('@comandas:cnpj');
 
 
-    const groups = await Firebase.firebase.firestore()
+    const groups = await Firebase.firestore()
       .collection('companies')
       .doc(`${cnpj}`)
       .collection('productGroups')
@@ -19,9 +19,8 @@ export const getProducts = () => {
           groups.push({ id: doc.id, ...doc.data() })
         })
         return groups;
-      });
-    console.log('groups', groups)
-    const products = await Firebase.firebase.firestore()
+      });    
+    const products = await Firebase.firestore()
       .collection('companies')
       .doc(`${cnpj}`)
       .collection('products')
@@ -32,8 +31,7 @@ export const getProducts = () => {
           products.push({ id: doc.id, ...doc.data() })
         });
         return products;
-      });
-    console.log('products', products)
+      });    
 
     dispatch({
       type: GET_PRODUCTS,

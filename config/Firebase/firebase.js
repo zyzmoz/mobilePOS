@@ -5,12 +5,12 @@ import 'firebase/firestore'
 import firebaseConfig from './firebaseConfig'
 
 // Initialize Firebase
-const fb = firebase.initializeApp(firebaseConfig);
+firebase.initializeApp(firebaseConfig);
 
 
 const Firebase = {
-  auth: firebase.auth(),
-  firebase: fb,
+  auth: firebase.auth,
+  firestore: firebase.firestore,
   // auth
   loginWithEmail: (email, password) => {
     return firebase.auth().signInWithEmailAndPassword(email, password)
