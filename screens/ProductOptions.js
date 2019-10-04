@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import FormButton from '../components/FormButton';
 
+
 const ProductOptions = (props) => {
   const { navigation } = props;
 
@@ -12,7 +13,7 @@ const ProductOptions = (props) => {
   return (
     <View style={styles.container}>
       <Text>Product Options</Text>
-      
+
       <FormButton
         buttonType='outline'
         onPress={() => handleCancel()}
@@ -26,6 +27,16 @@ const ProductOptions = (props) => {
         title='Confirm'
         buttonColor='#8cc152'
       />
+      {/* <Tabs>
+        <Tab
+          title="Test"
+        >
+          <View>
+            <Text>Hello</Text>
+          </View>
+        </Tab>
+      </Tabs> */}
+
     </View>
 
   );
