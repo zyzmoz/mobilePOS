@@ -1,10 +1,15 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
+import { connect } from 'react-redux';
 import FormButton from '../components/FormButton';
+
+const mapState = (state) => ({
+  product: state.cart.product
+});
 
 
 const ProductOptions = (props) => {
-  const { navigation } = props;
+  const { navigation, product } = props;
 
   const handleCancel = () => {
     navigation.goBack();
@@ -15,6 +20,7 @@ const ProductOptions = (props) => {
       <Text>Product Options</Text>
 
       <FormButton
+        
         buttonType='outline'
         onPress={() => handleCancel()}
         title='Cancel'
@@ -22,20 +28,13 @@ const ProductOptions = (props) => {
       />
 
       <FormButton
+        
         buttonType='outline'
         onPress={() => handleCancel()}
         title='Confirm'
         buttonColor='#8cc152'
       />
-      {/* <Tabs>
-        <Tab
-          title="Test"
-        >
-          <View>
-            <Text>Hello</Text>
-          </View>
-        </Tab>
-      </Tabs> */}
+     
 
     </View>
 
@@ -55,4 +54,4 @@ const styles = StyleSheet.create({
   },
 })
 
-export default ProductOptions;
+export default connect(mapState)(ProductOptions);

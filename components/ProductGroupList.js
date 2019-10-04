@@ -1,23 +1,28 @@
-import React from 'react';
-import { StyleSheet, Dimensions, View } from 'react-native';
+import React, { Fragment } from 'react';
+import { StyleSheet, Dimensions, View, Text, TouchableOpacity } from 'react-native';
 import { Tile } from 'react-native-elements';
 
 const ProductGroupList = ({ groups, openProducts }) => {
-  
+
   return (
     <View style={styles.tiles}>
+
       {groups && groups.map((group, i) =>
-        <Tile
+        (<TouchableOpacity
+          activeOpacity={0.7}
+          style={styles.tile}
           key={i}
-          overlayContainerStyle={styles.tile}
-          contentContainerStyle={styles.tile}
-          containerStyle={styles.tile}
-          titleStyle={styles.tileTitle}
-          featured
-          title={group.name}
           onPress={() => openProducts(group)}
-        />
+        >
+
+
+          <Text style={styles.tileTitle}>{group.name}</Text>
+
+        </TouchableOpacity>)
       )}
+
+
+
 
     </View>
   );
@@ -26,20 +31,22 @@ const ProductGroupList = ({ groups, openProducts }) => {
 const styles = StyleSheet.create({
   tiles: {
     flex: 1,
-
     flexWrap: 'wrap',
     flexDirection: "row",
     justifyContent: 'space-between',
   },
   tile: {
     width: '49%',
-    maxHeight: Math.round(Dimensions.get('window').width / 2),
-    marginTop: 2,
-    backgroundColor: '#d8737f'
+    height: Math.round(Dimensions.get('window').width / 2),
+    marginTop: 5,
+    backgroundColor: '#d8737f',
+    alignItems: 'center',
+    justifyContent: 'center'
 
   },
   tileTitle: {
-    color: '#f2f2f2'
+    color: '#f2f2f2',
+    fontSize: 18
 
   }
 })
