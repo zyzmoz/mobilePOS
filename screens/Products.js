@@ -1,38 +1,37 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
+import { selectProduct } from '../actions/cart';
 import { connect } from 'react-redux';
-import { sellProduct } from '../actions/cart';
 import ProductList from '../components/ProductList';
 
 
-const mapState = (state) => ({
-  products: state.cart.products
+const mapState = (state) => ({  
+  product: state.cart.product,
+  products: state.product.products,
+  group: state.product.group
 });
 
 const actions = {
-  sellProduct
+  selectProduct
 }
 
 const Products = (props) => {
-  const {sellProduct, navigation } = props;    
-  const products = navigation.getParam('products');
+  const { selectProduct, navigation, products } = props;  
 
-  const handleSellProduct = (product) =>{
-    // sellProduct(product);
-    //id the product has optionals push a page to select it
-    //verify where to put that
-    navigation.navigate('ProductOptions', {product});
+  const handleProductSelection = (product) => {
+    selectProduct(product);    
+    navigation.navigate('ProductOptions', {title: product.description});
   }
 
   return (
     <View style={styles.container}>
-      <ProductList products={products} sellProduct={handleSellProduct}/>
+      <ProductList products={products} selectProduct={handleProductSelection} />
     </View>
   );
 };
 
-Products.navigationOptions = ({ navigation }) => ({
-  title: navigation.getParam('group').name
+Products.navigationOptions = ({navigation}) => ({
+  title: navigation.getParam('title')
 });
 
 

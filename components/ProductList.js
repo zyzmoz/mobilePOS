@@ -2,7 +2,7 @@ import React from 'react';
 import {StyleSheet, View, Text} from 'react-native';
 import FormButton from './FormButton';
 
-const ProductList = ({products, sellProduct}) => {
+const ProductList = ({products, selectProduct}) => {
   return (
     <View style={styles.container}>
       {products && products.map((product, i) =>
@@ -14,7 +14,7 @@ const ProductList = ({products, sellProduct}) => {
           <View style={styles.buttonContainer}>
             <FormButton
               buttonType='outline'
-              onPress={() => sellProduct(product)}
+              onPress={() => selectProduct(product)}
               title='Add'
               buttonColor='#039BE5'
               // disabled={!isValid || isSubmitting}

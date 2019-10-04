@@ -1,5 +1,5 @@
 import { createReducer } from "./createReducer";
-import { SELL_PRODUCT } from "../actions/cart";
+import { SELL_PRODUCT, SELECT_PRODUCT } from "../actions/cart";
 
 const initialState = {};
 
@@ -14,6 +14,11 @@ const sellProduct = (state, payload) => {
   return { ...state, products }
 }
 
+const selectProduct = (state, payload) => {
+  return { ...state, product: payload.product };
+}
+
 export default createReducer(initialState, {
-  [SELL_PRODUCT]: sellProduct
+  [SELL_PRODUCT]: sellProduct,
+  [SELECT_PRODUCT]: selectProduct
 })

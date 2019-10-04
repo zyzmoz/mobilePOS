@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, ScrollView, Button } from 'react-native';
 import { connect } from 'react-redux';
-import { getProducts } from '../actions/product';
+import { getProducts, getProductsByGroup } from '../actions/product';
 import { signOut, getCurrentUser } from '../actions/auth';
 import ProductGroupList from '../components/ProductGroupList';
 
@@ -14,6 +14,7 @@ const mapState = (state) => ({
 
 const actions = {
   getProducts,
+  getProductsByGroup,
   signOut,
   getCurrentUser
 }
@@ -32,9 +33,8 @@ class Home extends Component {
   }
 
   openProducts = async (group) => {
-    const { id } = group;
-    const products = await this.props.products.filter(product => product.groupId === id);
-    this.props.navigation.navigate('Products', { group, products })
+    await this.props.getProductsByGroup(group);
+    this.props.navigation.navigate('Products', { title: group.name });
   }
 
   render() {

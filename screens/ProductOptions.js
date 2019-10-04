@@ -32,7 +32,7 @@ const ProductOptions = (props) => {
 };
 
 ProductOptions.navigationOptions = ({ navigation }) => ({
-  title: navigation.getParam('product').description
+  title: navigation.getParam('title')
 });
 
 const styles = StyleSheet.create({
