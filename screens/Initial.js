@@ -1,9 +1,11 @@
 import React, { Component } from 'react'
 import { AppLoading } from 'expo'
-import { Asset } from 'expo-asset'
+import { Asset } from 'expo-asset';
 import * as Font from 'expo-font'
 import * as Icon from '@expo/vector-icons'
-import { withFirebaseHOC } from '../config/Firebase'
+import { withFirebaseHOC } from '../config/Firebase';
+
+
 
 class Initial extends Component {
   
@@ -15,7 +17,7 @@ class Initial extends Component {
   componentDidMount = async () => {
     try {
       // previously
-      this.loadLocalAsync()
+      this.loadLocalAsync();     
 
       await this.props.firebase.checkUserAuth(user => {
         if (user) {
@@ -64,4 +66,4 @@ class Initial extends Component {
   }
 }
 
-export default withFirebaseHOC(Initial)
+export default withFirebaseHOC(Initial);

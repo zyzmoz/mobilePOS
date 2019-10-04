@@ -18,10 +18,10 @@ const Products = (props) => {
   const products = navigation.getParam('products');
 
   const handleSellProduct = (product) =>{
-    sellProduct(product);
+    // sellProduct(product);
     //id the product has optionals push a page to select it
     //verify where to put that
-    navigation.goBack();
+    navigation.navigate('ProductOptions', {product});
   }
 
   return (

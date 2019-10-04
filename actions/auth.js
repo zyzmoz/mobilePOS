@@ -63,8 +63,23 @@ export const signOut = () => {
   }
 }
 
-export const checkUserAuth = async (user) => {
-  return auth().onAuthStateChanged(user)
+export const checkUserAuth = () => {
+  return async (dispatch) => {
+    Firebase.auth().onAuthStateChanged(user => {
+      console.log('Act Auth', user);
+      if (user) {
+        dispatch({
+          type: CHECK_USER_AUTH,
+          payload: { authenticated: true }
+        })
+      } else {
+        dispatch({
+          type: CHECK_USER_AUTH,
+          payload: { authenticated: false }
+        })
+      }
+    });
+  }
 }
 
 // firestore
