@@ -1,18 +1,28 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TextInput } from 'react-native';
 import { connect } from 'react-redux';
+import { sellProduct } from '../actions/cart';
 import FormButton from '../components/FormButton';
 
 const mapState = (state) => ({
   product: state.cart.product
 });
 
+const actions = {
+  sellProduct,
+}
+
 
 const ProductOptions = (props) => {
-  const { navigation, product } = props;
+  const { navigation, product, sellProduct } = props;
   const [quantity, setQuantity] = useState(1);
 
   const handleCancel = () => {
+    navigation.goBack();
+  }
+
+  handleConfirmation = () => {
+    sellProduct({...product, quantity});
     navigation.goBack();
   }
 
@@ -41,7 +51,7 @@ const ProductOptions = (props) => {
         <FormButton
           style={styles.button}
           buttonType='outline'
-          onPress={() => handleCancel()}
+          onPress={() => handleConfirmation()}
           title='Confirm'
           buttonColor='#8cc152'
         />
@@ -86,4 +96,4 @@ const styles = StyleSheet.create({
   }
 })
 
-export default connect(mapState)(ProductOptions);
+export default connect(mapState, actions)(ProductOptions);

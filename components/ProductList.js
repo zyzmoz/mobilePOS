@@ -15,7 +15,7 @@ const ProductList = ({products, selectProduct}) => {
             <FormButton
               buttonType='outline'
               onPress={() => selectProduct(product)}
-              title='Add'
+              title='Add'            
               buttonColor='#039BE5'
               // disabled={!isValid || isSubmitting}
               // loading={isSubmitting}
