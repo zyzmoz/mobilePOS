@@ -30,6 +30,7 @@ const styles = StyleSheet.create({
     margin: 15
   },
   iconStyle: {
+    
     marginRight: 10
   }
 })

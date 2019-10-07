@@ -22,7 +22,7 @@ const validationSchema = Yup.object().shape({
     .min(6, 'Password must have at least 6 characters '),
   cnpj: Yup.string()
     .label('CNPJ')
-    .matches(/^\d+$/, "Please inform the CNPJ typing onlu numbers")
+    .matches(/^\d+$/, "Please inform the CNPJ typing only numbers")
     .required('Please enter a registered CNPJ')
     .min(14, "CNPJ must have at least 14 characters")
     
