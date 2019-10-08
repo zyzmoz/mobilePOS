@@ -7,9 +7,9 @@ const initialState = {};
 const sellProduct = (state, payload) => {
   let { products } = state;
   if (!products)
-    products = [payload.product]
-  else
-    products.push(payload.product);
+    products = [];
+  
+  products.push(payload.product);
 
   return { ...state, products }
 }

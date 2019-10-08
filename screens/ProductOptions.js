@@ -15,13 +15,13 @@ const actions = {
 
 const ProductOptions = (props) => {
   const { navigation, product, sellProduct } = props;
-  const [quantity, setQuantity] = useState(1);
+  const [quantity, setQuantity] = useState('1');
 
   const handleCancel = () => {
     navigation.goBack();
   }
 
-  handleConfirmation = () => {
+  handleConfirmation = () => {    
     sellProduct({...product, quantity});
     navigation.goBack();
   }
