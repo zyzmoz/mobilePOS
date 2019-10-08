@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { View, StyleSheet, Text, FlatList} from 'react-native';
 import { connect } from 'react-redux';
 
@@ -8,18 +8,22 @@ const mapState = (state) => ({
 
 const Cart = (props) => {
   const { products } = props;
-  console.log('Cart', products);
-
+  
+  useEffect(() => {
+    console.log('Cart', products);
+  }, [])
 
   
   return (
     <View style={styles.container}>
-      <FlatList 
+      {products && products.map((product, i) => <CartItem key={i} item={product}/>)}
+      {/* <FlatList 
         data={products}
         renderItem= {({item}) => <CartItem item={item}/>}
         keyExtractor={({}, index) => index.toString()}
+        refreshing
         
-      />
+      /> */}
           
     </View>
   );

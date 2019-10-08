@@ -5,7 +5,8 @@ import { sellProduct } from '../actions/cart';
 import FormButton from '../components/FormButton';
 
 const mapState = (state) => ({
-  product: state.cart.product
+  product: state.cart.product,
+  
 });
 
 const actions = {
@@ -25,7 +26,7 @@ const ProductOptions = (props) => {
     sellProduct({...product, quantity});
     navigation.goBack();
   }
-
+  
   return (
     <View style={styles.container}>
       <View>
