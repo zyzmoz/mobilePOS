@@ -2,7 +2,7 @@ import React from 'react';
 import { View, StyleSheet, FlatList, Alert } from 'react-native';
 import { NavigationEvents } from 'react-navigation';
 import { connect } from 'react-redux';
-import { clearCart, removeProduct } from '../actions/cart';
+import { clearCart, removeProduct, completeOrder } from '../actions/cart';
 import CartItem from '../components/CartItem';
 import FormButton from '../components/FormButton';
 
@@ -12,11 +12,12 @@ const mapState = (state) => ({
 
 const actions = {
   clearCart,
-  removeProduct
+  removeProduct,
+  completeOrder
 }
 
 const Cart = (props) => {
-  const { products, clearCart, removeProduct } = props;
+  const { products, clearCart, removeProduct, completeOrder } = props;
 
   const handleClearCart = () => {
     Alert.alert(
@@ -33,8 +34,7 @@ const Cart = (props) => {
     );
   }
 
-  const handleProductRemoval = (index) => {
-    const { navigation } = props;
+  const handleProductRemoval = (index) => {    
     Alert.alert(
       'Alert',
       'Do really you want to remove this product?',
@@ -42,8 +42,7 @@ const Cart = (props) => {
         {
           text: 'Yes',
           onPress: () => {
-            removeProduct(index);
-            navigation.replace('Cart')
+            removeProduct(index);            
           }
         },
         { text: 'No', style: 'cancel', onPress: () => console.log('cancelled') }
@@ -76,7 +75,7 @@ const Cart = (props) => {
           <FormButton
             style={styles.button}
             buttonType='outline'
-            // onPress={() => handleConfirmation()}
+            onPress={() => completeOrder()}
             title='Confirm'
             buttonColor='#8cc152'
           />

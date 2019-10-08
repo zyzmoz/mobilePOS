@@ -2,6 +2,7 @@ export const SELL_PRODUCT = 'SELL_PRODUCT';
 export const SELECT_PRODUCT = 'SELECT_PRODUCT';
 export const CLEAR_CART = 'CLEAR_CART';
 export const REMOVE_PRODUCT = 'REMOVE_PRODUCT';
+export const COMPLETE_ORDER = 'COMPLETE_ORDER';
 
 export const sellProduct = (product) => {
   return (dispatch, getState) => {
@@ -40,5 +41,12 @@ export const removeProduct = (index) => {
 export const clearCart = () => {
   return {
     type: CLEAR_CART
+  }
+}
+
+export const completeOrder = () => {
+  //Store on firebase
+  return {
+    type: COMPLETE_ORDER
   }
 }
