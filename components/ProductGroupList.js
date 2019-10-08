@@ -37,7 +37,7 @@ const styles = StyleSheet.create({
   },
   tile: {
     width: '49%',
-    height: Math.round(Dimensions.get('window').width / 2),
+    height: Math.round(Dimensions.get('window').width / 4),
     marginTop: 5,
     backgroundColor: '#d8737f',
     alignItems: 'center',

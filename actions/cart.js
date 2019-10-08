@@ -1,8 +1,7 @@
 export const SELL_PRODUCT = 'SELL_PRODUCT';
 export const SELECT_PRODUCT = 'SELECT_PRODUCT';
-
-import { firestore } from '../config/Firebase/firebase';
-
+export const CLEAR_CART = 'CLEAR_CART';
+export const REMOVE_PRODUCT = 'REMOVE_PRODUCT';
 
 export const sellProduct = (product) => {
   return (dispatch, getState) => {
@@ -21,5 +20,25 @@ export const selectProduct = (product) => {
   return {
     type: SELECT_PRODUCT,
     payload: { product }
+  }
+}
+
+export const removeProduct = (index) => {
+  return async(dispatch, getState) => {
+    let { products } = getState().cart;
+    await products.splice(index, 1);
+    if (products.length === 0)
+      products = null;
+    dispatch({
+      type: REMOVE_PRODUCT,
+      payload: { products }
+    });
+  }
+}
+
+
+export const clearCart = () => {
+  return {
+    type: CLEAR_CART
   }
 }

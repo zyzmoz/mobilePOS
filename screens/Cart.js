@@ -1,16 +1,57 @@
-import React, { useEffect } from 'react';
-import { View, StyleSheet, Text, FlatList } from 'react-native';
+import React from 'react';
+import { View, StyleSheet, FlatList, Alert } from 'react-native';
 import { NavigationEvents } from 'react-navigation';
 import { connect } from 'react-redux';
+import { clearCart, removeProduct } from '../actions/cart';
 import CartItem from '../components/CartItem';
+import FormButton from '../components/FormButton';
 
 const mapState = (state) => ({
   products: state.cart.products
-})
+});
+
+const actions = {
+  clearCart,
+  removeProduct
+}
 
 const Cart = (props) => {
-  const { products } = props;
-  console.log('props', props)
+  const { products, clearCart, removeProduct } = props;
+
+  const handleClearCart = () => {
+    Alert.alert(
+      'Alert',
+      'Do really you want to empty the cart?',
+      [
+        {
+          text: 'Yes',
+          onPress: () => clearCart()
+        },
+        { text: 'No', style: 'cancel', onPress: () => console.log('cancelled') }
+      ],
+      {cancelable: false}
+    );
+  }
+
+  const handleProductRemoval = (index) => {
+    const { navigation } = props;
+    Alert.alert(
+      'Alert',
+      'Do really you want to remove this product?',
+      [
+        {
+          text: 'Yes',
+          onPress: () => {
+            removeProduct(index);
+            navigation.replace('Cart')
+          }
+        },
+        { text: 'No', style: 'cancel', onPress: () => console.log('cancelled') }
+      ],
+      {cancelable: false}
+    );
+  }
+
   return (
     <View style={styles.container}>
       <NavigationEvents
@@ -18,9 +59,30 @@ const Cart = (props) => {
       />
       <FlatList
         data={products}
-        renderItem={({ item }) => <CartItem item={item} />}
+        renderItem={({ item, index }) => <CartItem item={item} index={index} removeProduct={handleProductRemoval}/>}
         keyExtractor={({ }, index) => index.toString()}
       />
+
+      {products &&
+        <View style={styles.buttonSet}>
+          <FormButton
+            style={styles.button}
+            buttonType='outline'
+            onPress={() => handleClearCart()}
+            title='Cancel'
+            buttonColor='#d8737F'
+          />
+
+          <FormButton
+            style={styles.button}
+            buttonType='outline'
+            // onPress={() => handleConfirmation()}
+            title='Confirm'
+            buttonColor='#8cc152'
+          />
+        </View>
+      }
+
 
     </View>
   );
@@ -35,8 +97,15 @@ const styles = StyleSheet.create({
     marginHorizontal: 3,
     marginVertical: 3,
   },
+  buttonSet: {
+    width: '100%',
+  },
+  button: {
+
+    marginBottom: 8
+  }
 
 });
 
-export default connect(mapState)(Cart);//withCartHOC(Cart);
+export default connect(mapState, actions)(Cart);
 
