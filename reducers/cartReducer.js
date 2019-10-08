@@ -4,14 +4,9 @@ import { SELL_PRODUCT, SELECT_PRODUCT } from "../actions/cart";
 const initialState = {};
 
 
-const sellProduct = (state, payload) => {
-  let { products } = state;
-  if (!products)
-    products = [];
-  
-  products.push(payload.product);
-
-  return { ...state, products }
+const sellProduct = (state, payload) => {   
+  const { products } = payload;
+  return { products }
 }
 
 const selectProduct = (state, payload) => {

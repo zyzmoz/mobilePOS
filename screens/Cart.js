@@ -1,48 +1,32 @@
 import React, { useEffect } from 'react';
-import { View, StyleSheet, Text, FlatList} from 'react-native';
+import { View, StyleSheet, Text, FlatList } from 'react-native';
+import { NavigationEvents } from 'react-navigation';
 import { connect } from 'react-redux';
+import CartItem from '../components/CartItem';
 
 const mapState = (state) => ({
-  products: state.cart.products,
-});
+  products: state.cart.products
+})
 
 const Cart = (props) => {
   const { products } = props;
-  
-  useEffect(() => {
-    console.log('Cart', products);
-  }, [])
-
-  
+  console.log('props', props)
   return (
     <View style={styles.container}>
-      {products && products.map((product, i) => <CartItem key={i} item={product}/>)}
-      {/* <FlatList 
+      <NavigationEvents
+        onWillBlur={() => props.navigation.navigate('Order')}
+      />
+      <FlatList
         data={products}
-        renderItem= {({item}) => <CartItem item={item}/>}
-        keyExtractor={({}, index) => index.toString()}
-        refreshing
-        
-      /> */}
-          
+        renderItem={({ item }) => <CartItem item={item} />}
+        keyExtractor={({ }, index) => index.toString()}
+      />
+
     </View>
   );
 };
 
-const CartItem = ({item, deleteProduct}) => {
-  return (
-    <View style={styles.container}>
-      <View>
-        <Text>{item.quantity}x</Text>
-      </View>
-      <View>
-        <Text>{item.description}</Text>
-      </View>
-      <View>
-      </View>
-    </View>
-  )
-}
+
 
 const styles = StyleSheet.create({
   container: {
@@ -51,7 +35,8 @@ const styles = StyleSheet.create({
     marginHorizontal: 3,
     marginVertical: 3,
   },
-  
+
 });
 
-export default connect(mapState)(Cart);
+export default connect(mapState)(Cart);//withCartHOC(Cart);
+

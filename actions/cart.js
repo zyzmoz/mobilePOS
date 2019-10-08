@@ -5,10 +5,14 @@ import { firestore } from '../config/Firebase/firebase';
 
 
 export const sellProduct = (product) => {
-  return (dispatch) => {
+  return (dispatch, getState) => {
+    let { products } = getState().cart;
+    if (!products)
+      products = [];
+    products.push(product);
     dispatch({
       type: SELL_PRODUCT,
-      payload: { product }
+      payload: { products }
     });
   }
 }
