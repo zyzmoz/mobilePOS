@@ -8,6 +8,7 @@ import Products from '../screens/Products'
 import Cart from '../screens/Cart';
 import { Ionicons } from '@expo/vector-icons';
 import ProductOptions from '../screens/ProductOptions';
+import PlacedOrders from '../screens/PlacedOrders';
 
 
 const OrderNavigation = createStackNavigator(
@@ -38,15 +39,21 @@ const CartNavigation = createStackNavigator(
   }
 )
 
+const PlacedOrdersNavigation = createStackNavigator(
+  {
+    Orders: { screen: PlacedOrders }
+  }
+)
+
 const AppNavigation = createBottomTabNavigator({
   Order: {
     screen: OrderNavigation,
     navigationOptions: ({ navigation }) => {
-      const isRoot = navigation.getParam('isRoot');     
+      const isRoot = navigation.getParam('isRoot');
 
       console.log('isRoot', isRoot);
-      if (isRoot){
-        navigation.setParams({isRoot: null});     
+      if (isRoot) {
+        navigation.setParams({ isRoot: null });
         navigation.navigate('Home');
       }
       return;
@@ -57,10 +64,18 @@ const AppNavigation = createBottomTabNavigator({
     navigationOptions: ({ navigation }) => ({
       tabBarOnPress: () => {
         const { routeName } = navigation.state;
-        navigation.replace(routeName);
+        if (routeName === 'Cart')
+          navigation.replace(routeName);
         // console.log('CLICK BAIT')
       }
     })
+  },
+  PlacedOrders: {
+    screen: PlacedOrdersNavigation,
+    navigationOptions: {
+      title: 'Placed Orders',      
+    }
+    
   }
 
 }, {
@@ -84,6 +99,8 @@ const AppNavigation = createBottomTabNavigator({
         // IconComponent = HomeIconWithBadge;
       } else if (routeName === 'Cart') {
         iconName = `ios-cart`;
+      } else if (routeName === 'PlacedOrders') {
+        iconName = `ios-cube` 
       }
 
       // You can return any component that you like here!
@@ -92,27 +109,6 @@ const AppNavigation = createBottomTabNavigator({
     // 
   })
 
-
-
-
-  // defaultNavigationOptions: ({navigation}) => ({
-  //   tabBarIcon: () => {
-  //     const { routeName } = navigation.state;
-  //     let IconComponent = Ionicons;
-  //     let iconName;
-  //     if (routeName === 'Order') {
-  //       iconName = `ios-clipboard`;//${focused ? '' : '-outline'}`;
-  //       // Sometimes we want to add badges to some icons.
-  //       // You can check the implementation below.
-  //       // IconComponent = HomeIconWithBadge;
-  //     } else if (routeName === 'Cart') {
-  //       iconName = `ios-cart`;
-  //     }
-
-  //     // You can return any component that you like here!
-  //     return <IconComponent name={iconName} size={25} />;
-  //   },    
-  // })
 })
 
 export default AppNavigation
