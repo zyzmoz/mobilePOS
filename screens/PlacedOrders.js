@@ -1,10 +1,32 @@
-import React from 'react';
-import {View, Text, StyleSheet} from 'react-native';
+import React, {useEffect} from 'react';
+import {View, Text, StyleSheet, FlatList} from 'react-native';
+import { connect } from 'react-redux';
+import {getPlacedOrders} from '../actions/cart';
+import moment from 'moment';
 
-const PlacedOrders = () => {
+const mapState = (state) => ({
+  orders: state.cart.orders
+});
+
+const actions = {
+  getPlacedOrders
+}
+
+const PlacedOrders = (props) => {
+  const { orders } = props;
+  useEffect(() => {
+    props.getPlacedOrders();
+  }, [])
+  console.log('Orders,', orders)
   return (
     <View style={styles.container}>
-      <Text>Placed Orders</Text>      
+      <FlatList
+        data={orders}       
+        renderItem={({ item, index }) => <Text>{moment(item.createdAt.toDate()).format('DD/MM/YYYY hh:mm:ss')} - Card:{item.card} - Table:{item.table} - Total:{item.total.toFixed(2)}</Text>}
+        keyExtractor={({ }, index) => index.toString()}   
+
+
+      />
     </View>
   );
 };
@@ -22,4 +44,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default PlacedOrders;
+export default connect(mapState,actions)(PlacedOrders);

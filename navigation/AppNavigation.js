@@ -41,8 +41,10 @@ const CartNavigation = createStackNavigator(
 
 const PlacedOrdersNavigation = createStackNavigator(
   {
-    Orders: { screen: PlacedOrders }
-  }
+    Orders: { screen: PlacedOrders },
+
+  },
+  {initialRouteName: 'Orders'},
 )
 
 const AppNavigation = createBottomTabNavigator({
@@ -50,9 +52,9 @@ const AppNavigation = createBottomTabNavigator({
     screen: OrderNavigation,
     navigationOptions: ({ navigation }) => {
       const isRoot = navigation.getParam('isRoot');
+      const { routeName } = navigation.state;
 
-      console.log('isRoot', isRoot);
-      if (isRoot) {
+      if (isRoot && (routeName === 'Order')) {
         navigation.setParams({ isRoot: null });
         navigation.navigate('Home');
       }
@@ -72,10 +74,17 @@ const AppNavigation = createBottomTabNavigator({
   },
   PlacedOrders: {
     screen: PlacedOrdersNavigation,
-    navigationOptions: {
-      title: 'Placed Orders',      
-    }
-    
+    navigationOptions: ({ navigation }) => ({
+      title: 'Placed Orders',
+      tabBarOnPress: () => {
+        const { routeName } = navigation.state;
+        
+        if (routeName === 'PlacedOrders')
+          navigation.replace('Orders');
+      }
+    })
+
+
   }
 
 }, {
@@ -100,7 +109,7 @@ const AppNavigation = createBottomTabNavigator({
       } else if (routeName === 'Cart') {
         iconName = `ios-cart`;
       } else if (routeName === 'PlacedOrders') {
-        iconName = `ios-cube` 
+        iconName = `ios-cube`
       }
 
       // You can return any component that you like here!

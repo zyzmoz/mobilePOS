@@ -37,10 +37,10 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1
   },
   value: {
-    width: '10%'
+    width: '15%'
   },
   description: {
-    width: '70%'
+    width: '60%'
   },
   button: {
     padding: 8,    

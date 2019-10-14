@@ -3,6 +3,7 @@ export const SELECT_PRODUCT = 'SELECT_PRODUCT';
 export const CLEAR_CART = 'CLEAR_CART';
 export const REMOVE_PRODUCT = 'REMOVE_PRODUCT';
 export const COMPLETE_ORDER = 'COMPLETE_ORDER';
+export const GET_PLACEDORDERS = 'GET_PLACEDORDERS';
 import Firebase from '../config/Firebase';
 import { AsyncStorage } from 'react-native';
 
@@ -57,7 +58,7 @@ export const completeOrder = (card, table) => {
     await Firebase.firestore()
       .collection('companies')
       .doc(`${cnpj}`)
-      .collection('sales')
+      .collection('orders')
       .add({
         ...products,
         createdAt: new Date(),
@@ -66,12 +67,33 @@ export const completeOrder = (card, table) => {
         card,
         table
       });
+    getPlacedOrders();
     dispatch({
       type: COMPLETE_ORDER
     });
   }
 }
 
-const getPlacedOrders = () => {
+export const getPlacedOrders = () => {
+  return async (dispatch) => {
+    const cnpj = await AsyncStorage.getItem('@comandas:cnpj');
+    const orders = await Firebase.firestore()
+      .collection('companies')
+      .doc(`${cnpj}`)
+      .collection('orders')
+      .orderBy('createdAt','desc')      
+      .get().then(snapshot => {
+        let orders = [];
+        snapshot.forEach(doc => {
+          orders.push({ id: doc.id, ...doc.data() })
+        });
+        return orders;
+      });
+    dispatch({
+      type: GET_PLACEDORDERS,
+      payload: { orders }
+    });
+
+  }
 
 }

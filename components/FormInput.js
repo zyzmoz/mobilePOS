@@ -21,6 +21,7 @@ const FormInput = ({
       name={name}
       placeholder={placeholder}
       style={styles.input}
+      
     />
   </View>
 )

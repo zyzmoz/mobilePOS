@@ -53,10 +53,9 @@ const Cart = (props) => {
     );
   }
 
-  const handleOrderCompletion = async () => {
+  const handleOrderCompletion = async () => {        
     await completeOrder(card, table);
     props.navigation.navigate('Order', { isRoot: true });
-
   }
 
   return (

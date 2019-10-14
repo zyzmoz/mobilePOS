@@ -1,5 +1,5 @@
 import { createReducer } from "./createReducer";
-import { SELL_PRODUCT, SELECT_PRODUCT, CLEAR_CART, REMOVE_PRODUCT, COMPLETE_ORDER } from "../actions/cart";
+import { SELL_PRODUCT, SELECT_PRODUCT, CLEAR_CART, REMOVE_PRODUCT, COMPLETE_ORDER, GET_PLACEDORDERS } from "../actions/cart";
 
 const initialState = {};
 
@@ -19,11 +19,16 @@ const clearCart = (state, payload) => {
 
 const removeProduct = (state, payload) => {
   const { products } = payload;
-  return {...state, products };
+  return { ...state, products };
 }
 
 const completeOrder = (state, payload) => {
   return { ...state, products: null }
+}
+
+const getPlacedOrders = (state, payload) => {
+  const { orders } = payload;
+  return { ...state, orders }
 }
 
 export default createReducer(initialState, {
@@ -31,5 +36,6 @@ export default createReducer(initialState, {
   [SELECT_PRODUCT]: selectProduct,
   [CLEAR_CART]: clearCart,
   [REMOVE_PRODUCT]: removeProduct,
-  [COMPLETE_ORDER]: completeOrder
+  [COMPLETE_ORDER]: completeOrder,
+  [GET_PLACEDORDERS]: getPlacedOrders
 })
