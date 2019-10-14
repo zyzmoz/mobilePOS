@@ -46,12 +46,14 @@ export const clearCart = () => {
   }
 }
 
-export const completeOrder = () => {
+export const completeOrder = (card, table) => {
   return async (dispatch, getState) => {
     let { products } = getState().cart;
     //Store on firebase
     const cnpj = await AsyncStorage.getItem('@comandas:cnpj');
     const { uid } = Firebase.auth().currentUser;
+    let total = 0;
+    products.map(product => total = total + (product.price * product.quantity));
     await Firebase.firestore()
       .collection('companies')
       .doc(`${cnpj}`)
@@ -59,10 +61,17 @@ export const completeOrder = () => {
       .add({
         ...products,
         createdAt: new Date(),
-        placedBy: uid
+        placedBy: uid,
+        total,
+        card,
+        table
       });
     dispatch({
       type: COMPLETE_ORDER
     });
   }
+}
+
+const getPlacedOrders = () => {
+
 }

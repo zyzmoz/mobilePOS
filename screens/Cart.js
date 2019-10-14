@@ -1,5 +1,5 @@
-import React from 'react';
-import { View, StyleSheet, FlatList, Alert } from 'react-native';
+import React, {useState} from 'react';
+import { View, StyleSheet, FlatList, Alert, TextInput, Text } from 'react-native';
 import { NavigationEvents } from 'react-navigation';
 import { connect } from 'react-redux';
 import { clearCart, removeProduct, completeOrder } from '../actions/cart';
@@ -18,6 +18,8 @@ const actions = {
 
 const Cart = (props) => {
   const { products, clearCart, removeProduct, completeOrder } = props;
+  const [table, setTable] = useState('');
+  const [card, setCard] = useState('');
 
   const handleClearCart = () => {
     Alert.alert(
@@ -52,7 +54,7 @@ const Cart = (props) => {
   }
 
   const handleOrderCompletion = async () => {
-    await completeOrder();
+    await completeOrder(card, table);
     props.navigation.navigate('Order', { isRoot: true });
 
   }
@@ -62,7 +64,28 @@ const Cart = (props) => {
       <NavigationEvents
         onWillBlur={() => props.navigation.navigate('Order')}
       />
-
+      <View style={styles.orderBy}>
+        <View style={styles.inputContainer}>
+          <Text>Card</Text>
+          <TextInput 
+            style={styles.input} 
+            placeholder="Card" 
+            keyboardType="number-pad"
+            value={card}
+            onChangeText={text => setCard(text)}
+            />
+        </View>
+        <View style={styles.inputContainer}>
+          <Text>Table</Text>
+          <TextInput 
+            style={styles.input} 
+            placeholder="Table"
+            keyboardType="number-pad"
+            value={table}
+            onChangeText={text => setTable(text)}
+            />
+        </View>
+      </View>
       <FlatList
         data={products}
         renderItem={({ item, index }) => <CartItem item={item} index={index} removeProduct={handleProductRemoval} />}
@@ -98,6 +121,23 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     marginHorizontal: 3,
     marginVertical: 3,
+  },
+  orderBy: {
+    display: 'flex',    
+    flexDirection: "row",
+    justifyContent: 'space-around'
+  },
+  inputContainer: {
+    width: '48%'
+  },
+  input: {
+    fontSize: 18,
+    paddingVertical: 5,
+    paddingHorizontal: 12,
+    borderWidth: 1,
+    borderColor: "#d6d6d6",
+    borderRadius: 20,
+    marginBottom: 15
   },
   buttonSet: {
     width: '100%',
