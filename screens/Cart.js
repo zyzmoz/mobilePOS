@@ -30,11 +30,11 @@ const Cart = (props) => {
         },
         { text: 'No', style: 'cancel', onPress: () => console.log('cancelled') }
       ],
-      {cancelable: false}
+      { cancelable: false }
     );
   }
 
-  const handleProductRemoval = (index) => {    
+  const handleProductRemoval = (index) => {
     Alert.alert(
       'Alert',
       'Do really you want to remove this product?',
@@ -42,13 +42,19 @@ const Cart = (props) => {
         {
           text: 'Yes',
           onPress: () => {
-            removeProduct(index);            
+            removeProduct(index);
           }
         },
         { text: 'No', style: 'cancel', onPress: () => console.log('cancelled') }
       ],
-      {cancelable: false}
+      { cancelable: false }
     );
+  }
+
+  const handleOrderCompletion = async () => {
+    await completeOrder();
+    props.navigation.navigate('Order', { isRoot: true });
+
   }
 
   return (
@@ -56,9 +62,10 @@ const Cart = (props) => {
       <NavigationEvents
         onWillBlur={() => props.navigation.navigate('Order')}
       />
+
       <FlatList
         data={products}
-        renderItem={({ item, index }) => <CartItem item={item} index={index} removeProduct={handleProductRemoval}/>}
+        renderItem={({ item, index }) => <CartItem item={item} index={index} removeProduct={handleProductRemoval} />}
         keyExtractor={({ }, index) => index.toString()}
       />
 
@@ -75,19 +82,15 @@ const Cart = (props) => {
           <FormButton
             style={styles.button}
             buttonType='outline'
-            onPress={() => completeOrder()}
+            onPress={() => handleOrderCompletion()}
             title='Confirm'
             buttonColor='#8cc152'
           />
         </View>
       }
-
-
     </View>
   );
 };
-
-
 
 const styles = StyleSheet.create({
   container: {
@@ -100,10 +103,8 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   button: {
-
     marginBottom: 8
   }
-
 });
 
 export default connect(mapState, actions)(Cart);

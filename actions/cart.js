@@ -3,6 +3,8 @@ export const SELECT_PRODUCT = 'SELECT_PRODUCT';
 export const CLEAR_CART = 'CLEAR_CART';
 export const REMOVE_PRODUCT = 'REMOVE_PRODUCT';
 export const COMPLETE_ORDER = 'COMPLETE_ORDER';
+import Firebase from '../config/Firebase';
+import { AsyncStorage } from 'react-native';
 
 export const sellProduct = (product) => {
   return (dispatch, getState) => {
@@ -25,7 +27,7 @@ export const selectProduct = (product) => {
 }
 
 export const removeProduct = (index) => {
-  return async(dispatch, getState) => {
+  return async (dispatch, getState) => {
     let { products } = getState().cart;
     await products.splice(index, 1);
     if (products.length === 0)
@@ -45,8 +47,22 @@ export const clearCart = () => {
 }
 
 export const completeOrder = () => {
-  //Store on firebase
-  return {
-    type: COMPLETE_ORDER
+  return async (dispatch, getState) => {
+    let { products } = getState().cart;
+    //Store on firebase
+    const cnpj = await AsyncStorage.getItem('@comandas:cnpj');
+    const { uid } = Firebase.auth().currentUser;
+    await Firebase.firestore()
+      .collection('companies')
+      .doc(`${cnpj}`)
+      .collection('sales')
+      .add({
+        ...products,
+        createdAt: new Date(),
+        placedBy: uid
+      });
+    dispatch({
+      type: COMPLETE_ORDER
+    });
   }
 }
