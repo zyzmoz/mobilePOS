@@ -17,6 +17,7 @@ const actions = {
 const ProductOptions = (props) => {
   const { navigation, product, sellProduct } = props;
   const [quantity, setQuantity] = useState('1');
+  const [note, setNote] = useState('');
 
   const handleCancel = () => {
     navigation.goBack();
@@ -32,12 +33,22 @@ const ProductOptions = (props) => {
       <View>
         <Text>Quantity</Text>
         <TextInput 
-          style={styles.qtyInput} 
+          style={styles.input} 
           defaultValue="1" 
           value={quantity} 
           keyboardType="numeric" 
           onChangeText={text => setQuantity(text)}
           selectTextOnFocus
+        />
+        <Text>Notes</Text>
+        <TextInput 
+          style={styles.textArea} 
+          defaultValue="" 
+          value={note}           
+          onChangeText={text => setNote(text)}          
+          multiline
+          numberOfLines={9}
+
         />
       </View>
       <View style={styles.buttonSet}>
@@ -75,7 +86,19 @@ const styles = StyleSheet.create({
     marginHorizontal: 3,
     marginVertical: 3,
   },
-  qtyInput: {
+  input: {
+    fontSize: 18,
+    paddingVertical: 5,
+    paddingHorizontal: 12,
+    borderWidth: 1,
+    borderColor: "#d6d6d6",
+    borderRadius: 20,
+    marginBottom: 15
+
+  },
+  textArea: {
+    textAlignVertical: 'top',
+    height: 150,
     fontSize: 18,
     paddingVertical: 5,
     paddingHorizontal: 12,
