@@ -41,7 +41,8 @@ const styles = StyleSheet.create({
     marginTop: 5,
     backgroundColor: '#d8737f',
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    borderRadius: 15
 
   },
   tileTitle: {
